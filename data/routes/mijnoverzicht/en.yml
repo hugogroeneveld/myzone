@@ -1,0 +1,11 @@
+id: mijn-overzicht
+fields:
+  pageTitle: MijnOverzicht
+placeholders:
+  jss-main:
+  - componentName: MijnOverzicht
+    fields:
+      heading: Mijn overzicht
+      content: |
+        <p>Content van mijnoverzicht</p>
+      subtitle: Welkom

@@ -1,0 +1,11 @@
+id: mijn-verzekeringen
+fields:
+  pageTitle: MijnVerzekeringen
+placeholders:
+  jss-main:
+  - componentName: MijnVerzekeringen
+    fields:
+      heading: Mijn verzekeringen
+      content: |
+        <p>Content van mijn verzekeringen</p>
+      subtitle: Uw verzekeringen inzien, wijzigen of schade melden.
