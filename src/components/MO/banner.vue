@@ -44,7 +44,7 @@ export default {
 	  	ctx: String
   }, data: function(){
       return {
-          baseUrl : window.document.getElementById('baseUrl').value
+          baseUrl : "/"
 	  }
 	}
 }
