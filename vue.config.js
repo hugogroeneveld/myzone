@@ -1,58 +1,58 @@
 let vueConfig = {};
 
 if (process.env.BUILD_TARGET_ENV === 'server') {
-  const serverConfig = require('./server/server.vue.config');
-  vueConfig = serverConfig;
+    const serverConfig = require('./server/server.vue.config');
+    vueConfig = serverConfig;
 } else if (process.env.BUILD_TARGET_ENV === 'client') {
-  // We can't directly assign a value to `process.env.BASE_URL`, as it is always assigned by `config.baseUrl`, regardless of whether `config.baseUrl` is defined or undefined.
-  // Therefore, we set a value for `process.env.PUBLIC_URL` then use that value for `config.baseUrl`.
-  vueConfig.baseUrl = process.env.PUBLIC_URL;
+    // We can't directly assign a value to `process.env.BASE_URL`, as it is always assigned by `config.baseUrl`, regardless of whether `config.baseUrl` is defined or undefined.
+    // Therefore, we set a value for `process.env.PUBLIC_URL` then use that value for `config.baseUrl`.
+    vueConfig.baseUrl = process.env.PUBLIC_URL;
 
-  // By default, Vue cli uses HtmlWebpackPlugin to generate the html file used for rendering the app.
-  // When in production mode, it also enables the HtmlWebpackPlugin `minify` option and sets
-  // the `removeAttributeQuotes` option of the html minifier to true.
-  // Our server-side rendering script uses string replacement to determine where to inject the
-  // rendered output of the JSS app. For example, the SSR script is looking for `<div id="root">` and injecting
-  // the rendered output into that place in the html template string.
-  // However, with the `removeAttributeQuotes` enabled, our html template output is `<div id=root>`, so the SSR
-  // string replacement can't find `<div id="root">`.
-  // Therefore, by disabling the `removeAttributeQuotes` flag for html minification, all is well.
-  if (process.env.NODE_ENV === 'production') {
-    vueConfig.chainWebpack = (config) => {
-      config.plugin('html').init((Plugin, args) => {
-        const newArgs = {
-          ...args[0],
+    // By default, Vue cli uses HtmlWebpackPlugin to generate the html file used for rendering the app.
+    // When in production mode, it also enables the HtmlWebpackPlugin `minify` option and sets
+    // the `removeAttributeQuotes` option of the html minifier to true.
+    // Our server-side rendering script uses string replacement to determine where to inject the
+    // rendered output of the JSS app. For example, the SSR script is looking for `<div id="root">` and injecting
+    // the rendered output into that place in the html template string.
+    // However, with the `removeAttributeQuotes` enabled, our html template output is `<div id=root>`, so the SSR
+    // string replacement can't find `<div id="root">`.
+    // Therefore, by disabling the `removeAttributeQuotes` flag for html minification, all is well.
+    if (process.env.NODE_ENV === 'production') {
+        vueConfig.chainWebpack = (config) => {
+            config.plugin('html').init((Plugin, args) => {
+                const newArgs = {
+                    ...args[0],
+                };
+                newArgs.minify.removeAttributeQuotes = false;
+                return new Plugin(newArgs);
+            });
         };
-        newArgs.minify.removeAttributeQuotes = false;
-        return new Plugin(newArgs);
-      });
-    };
-  }
-} else {
-  vueConfig.devServer = {
-    port: 8085,
-    https: true,
-    historyApiFallback: {
-      rewrites: [
-        { from: '/mijnverzekeringen/mijnoverzicht.html', to: '/mijnoverzicht' }]
-    },
-    proxy: {
-      '/sitecore' : {
-        target: 'http://localhost:3042',
-        logLevel: 'warn',
-      },
-      '/mijnverzekeringen' : {
-        target: 'https://viamijnwerk.dev.aon.nl/',
-        changeOrigin: true,
-        autoRewrite: true,
-        logLevel: 'debug',
-        secure: false,
-        pathRewrite: {
-          '/' : ''
-        }
-      }
     }
-  };
+} else {
+    vueConfig.devServer = {
+        port: 8085,
+        https: true,
+        historyApiFallback: {
+            rewrites: [
+                {from: '/mijnverzekeringen/mijnoverzicht.html', to: '/mijnoverzicht'}]
+        },
+        proxy: {
+            '/sitecore': {
+                target: 'http://localhost:3042',
+                logLevel: 'warn',
+            },
+            '/mijnverzekeringen': {
+                target: 'https://viamijnwerk.dev.aon.nl/',
+                changeOrigin: true,
+                autoRewrite: true,
+                logLevel: 'debug',
+                secure: false,
+                pathRewrite: {
+                    '/': ''
+                }
+            }
+        }
+    };
 }
 
 // We may already have an existing `configureWebpack` definition (e.g. when building the server bundle).
@@ -60,14 +60,14 @@ if (process.env.BUILD_TARGET_ENV === 'server') {
 // options that are common to both client/server bundles.
 const existingWebpackConfig = vueConfig.configureWebpack;
 vueConfig.configureWebpack = (config) => {
-  if (existingWebpackConfig) {
-    existingWebpackConfig(config);
-  }
-  config.module.rules.push({
-    test: /\.(graphql|gql)$/,
-    exclude: /node_modules/,
-    loader: 'graphql-tag/loader',
-  });
+    if (existingWebpackConfig) {
+        existingWebpackConfig(config);
+    }
+    config.module.rules.push({
+        test: /\.(graphql|gql)$/,
+        exclude: /node_modules/,
+        loader: 'graphql-tag/loader',
+    });
 };
 
 module.exports = vueConfig;
