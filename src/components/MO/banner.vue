@@ -1,7 +1,7 @@
 <template>
 	<div class="banner">
 		<div class="img">
-			<img :src="baseUrl'/static/images/header/' + websitename + '/header.jpg'" />
+			<img :src="baseUrl + '/static/images/header/' + websitename + '/header.jpg'" />
 		</div>
 		<div class="heading">
 			<div class="container-fluid" v-if="h1">
