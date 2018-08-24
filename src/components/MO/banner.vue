@@ -1,7 +1,8 @@
 <template>
 	<div class="banner">
+			{{baseUrl}}
 		<div class="img">
-			<img :src="baseUrl + '/static/images/header/' + websitename + '/header.jpg'" />
+			<img :src="baseUrl + 'static/images/header/' + websitename + '/header.jpg'" />
 		</div>
 		<div class="heading">
 			<div class="container-fluid" v-if="h1">
@@ -26,7 +27,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'banner-component',
   props: {
@@ -44,10 +44,9 @@ export default {
 	  	ctx: String
   }, data: function(){
       return {
-          baseUrl : document.getElementById('baseUrl').value
+          baseUrl : window.document.getElementById('baseUrl').value
 	  }
 	}
 }
-
 </script>
 
